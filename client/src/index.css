@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fira Code", monospace;
+
+  /* Cyberpunk Dark Palette */
+  --color-cyber-bg: #050508;
+  --color-cyber-card: rgba(10, 10, 18, 0.75);
+  --color-cyber-border: rgba(30, 41, 59, 0.5);
+  --color-cyber-border-glow: rgba(6, 182, 212, 0.15);
+  
+  --color-neon-cyan: #06b6d4;
+  --color-neon-green: #10b981;
+  --color-neon-red: #f43f5e;
+  --color-neon-yellow: #f59e0b;
+  --color-neon-blue: #3b82f6;
+  
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-scanline: scanline 8s linear infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+}
+
+:root {
+  color-scheme: dark;
+  --cyber-bg: #050508;
+  --cyber-border: rgba(30, 41, 59, 0.6);
+  --neon-cyan: #06b6d4;
+  --neon-green: #10b981;
+  --neon-red: #f43f5e;
+  --neon-yellow: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30, 41, 59, 0.8) transparent;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.4);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: #050508;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 45%),
+    #050508;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Ambient Grid Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.15;
+  background-image: 
+    linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* CRT Surveillance monitor scanline aesthetic */
+.scanline-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 10;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+/* Glassmorphism Panel styles */
+.glass-panel {
+  background: rgba(10, 10, 18, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-glow-cyan {
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.05), inset 0 0 10px rgba(6, 182, 212, 0.02);
+}
+
+.glass-panel-glow-green {
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.05), inset 0 0 10px rgba(16, 185, 129, 0.02);
+}
+
+.glass-panel-glow-red {
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.05), inset 0 0 10px rgba(244, 63, 94, 0.02);
+}
+
+/* Neon Text glow */
+.text-glow-cyan {
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+}
+.text-glow-green {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+.text-glow-red {
+  text-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+}
+
+/* Animation Keyframes */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.1), inset 0 0 5px rgba(6, 182, 212, 0.05);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 10px rgba(6, 182, 212, 0.15);
+  }
+}
+
+/* UI Transitions */
+.transition-all-300 {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hexagon grid background option */
+.cyber-grid {
+  background-image: radial-gradient(rgba(6, 182, 212, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}

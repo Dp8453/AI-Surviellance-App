@@ -1,0 +1,32 @@
+# Dockerfile for Express Server
+FROM node:20-bookworm-slim
+
+# Install ffmpeg for frame extraction
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy dependency files
+COPY server/package*.json ./
+
+# Install dependencies (including devDependencies to compile TypeScript)
+RUN npm ci
+
+# Copy server code
+COPY server/ ./
+
+# Build TypeScript to JS
+RUN npm run build
+
+# Delete dev dependencies after building
+RUN npm prune --production
+
+# Create uploads directory
+RUN mkdir -p uploads
+
+EXPOSE 5000
+
+ENV PORT=5000
+ENV NODE_ENV=production
+
+CMD ["node", "dist/app.js"]
