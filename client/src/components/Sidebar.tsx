@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
-// Declare API URL at module scope with a fallback to avoid runtime undefined errors
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export default function Sidebar() {
