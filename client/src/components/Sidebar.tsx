@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
+// Declare API URL at module scope with a fallback to avoid runtime undefined errors
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -28,20 +31,35 @@ export default function Sidebar() {
     return () => clearInterval(timer);
   }, []);
 
-  // Poll stats for active counts
+  // Poll stats for active counts every 30 seconds (and run immediately on mount/user change)
   useEffect(() => {
+    let isMounted = true;
+
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem('antigravity_surveillance_token');
         if (!token) return;
-        const res = await axios.get('http://localhost:5000/api/analytics/stats', {
+
+        const res = await axios.get(`${API_BASE_URL}/analytics/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setActiveFeeds(res.data.totalVideos || 0);
-      } catch (_) {}
+
+        if (isMounted) {
+          setActiveFeeds(res.data.totalVideos || 0);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch active surveillance stats:', err.message);
+      }
     };
+
     fetchStats();
-  }, []);
+    const pollInterval = setInterval(fetchStats, 30000); // Polling every 30 seconds
+
+    return () => {
+      isMounted = false;
+      clearInterval(pollInterval);
+    };
+  }, [user]); // Re-run effect setup if the user logs in/out
 
   const handleLogout = () => {
     logout();
@@ -72,7 +90,7 @@ export default function Sidebar() {
           </div>
           <div>
             <h1 className="text-xs font-bold tracking-wider text-slate-100 uppercase text-glow-cyan">
-              AI SURVIELLANCE
+              AI SURVEILLANCE
             </h1>
             <p className="text-[9px] text-cyan-400/80 font-mono tracking-widest uppercase">
               OPERATIONS SOC
@@ -83,7 +101,7 @@ export default function Sidebar() {
         {/* User profile card */}
         {user && (
           <div className="p-3 rounded-lg bg-slate-900/30 border border-cyber-border/30 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-slate-800 border border-cyber-border/80 flex items-center justify-center text-slate-300">
+            <div className="h-8 w-8 rounded-full bg-slate-800 border border-cyber-border/80 flex items-center justify-center text-slate-300 flex-shrink-0">
               <UserIcon className="h-4 w-4" />
             </div>
             <div className="min-w-0">
@@ -110,7 +128,7 @@ export default function Sidebar() {
                   }`
                 }
               >
-                <Icon className="h-4.5 w-4.5" />
+                <Icon className="h-4 w-4" />
                 <span>{item.label.toUpperCase()}</span>
               </NavLink>
             );

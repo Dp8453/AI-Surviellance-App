@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/antigravity-surveillance';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://dhananjaypandeysinghora_db_user:PpcL9Zv0MsD1zIdr@cluster0.tvazg0j.mongodb.net/?appName=Cluster0';
 
 export async function connectDB(): Promise<void> {
   try {

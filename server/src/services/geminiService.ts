@@ -55,7 +55,7 @@ export async function analyzeFrameFiles(
   const results: AISceneAnalysis[] = [];
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     // Process frames in batches of 3
     const batchSize = 3;

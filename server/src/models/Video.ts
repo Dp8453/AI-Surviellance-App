@@ -9,7 +9,7 @@ const VideoSchema = new Schema(
     },
     fileUrl: {
       type: String,
-      required: true,
+      default: '',
     },
     thumbnailUrl: {
       type: String,
